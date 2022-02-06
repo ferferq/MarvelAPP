@@ -6,6 +6,7 @@ import {
     Text
 } from 'react-native';
 import { ICharacter, IContent } from '../../../domain/entities';
+import { useCharacter } from '../../hooks';
 import { InfoCharacter } from '../InfoCharacter';
 import { Pagination } from '../Pagination';
 
@@ -13,16 +14,15 @@ import { styles } from './styles';
 
 interface IListCharacter {
     limitForPage: number;
-    contentCharacter: IContent<ICharacter[]>;
-    onSetPage: (numberPage: number) => Promise<void>;
-    currentPage: number;
+    contentCharacters: IContent<ICharacter[]>;
 }
 
-function ListCharacterComponent({ limitForPage, contentCharacter, onSetPage, currentPage }: IListCharacter) {
+function ListCharacterComponent({ limitForPage, contentCharacters }: IListCharacter) {
+    const { currentPage, onSetPage } = useCharacter();
     const sectionListData = useMemo(() => [{
         title: 'Nome',
-        data: contentCharacter.results
-    }], [contentCharacter]);
+        data: contentCharacters.results
+    }], [contentCharacters]);
 
     const handleSetPage = useCallback(async (numberPage: number) => {
         onSetPage(numberPage);
@@ -57,7 +57,7 @@ function ListCharacterComponent({ limitForPage, contentCharacter, onSetPage, cur
             
             <View>
                 <Pagination
-                    totalCountOfRegisters={contentCharacter.total}
+                    totalCountOfRegisters={contentCharacters.total}
                     registerPerPage={limitForPage}
                     currentPage={currentPage}
                     onPageChange={handleSetPage}
@@ -69,7 +69,6 @@ function ListCharacterComponent({ limitForPage, contentCharacter, onSetPage, cur
 }
 
 export const ListCharacter = memo(ListCharacterComponent, (prevProps, nextProps) => {
-     const resultIsTheSame = Object.is(prevProps.contentCharacter, nextProps.contentCharacter);
-     const currentPageIsTheSame = prevProps.currentPage === nextProps.currentPage;
-     return resultIsTheSame && currentPageIsTheSame;
+     const resultIsTheSame = Object.is(prevProps.contentCharacters, nextProps.contentCharacters);
+     return resultIsTheSame;
 });

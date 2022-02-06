@@ -1,72 +1,61 @@
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { Alert, Text, View } from 'react-native';
-import { ICharacter, IContent } from '../../../domain/entities';
-import { IListCharacter } from '../../../domain/models/useCases';
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
 import { Header } from '../../components/Header';
 import { ListCharacter } from '../../components/ListCharacter';
+import { Loading } from '../../components/loading';
 import { Search } from '../../components/Search';
 import { CONTAINER } from '../../constants';
+import { useCharacter } from '../../hooks';
 
 import { styles } from './styles';
 
-interface IHome {
-    listCharacters: IListCharacter;
-}
-
-export function Home({listCharacters} : IHome) {
-    const [contentCharacters, setContentCharacters] = useState<IContent<ICharacter[]> | undefined>(undefined);
-    const [currentPage, setCurrentPage] = useState(1);
+export function Home() {
+    const {
+        onSearch,
+        onListAllCharacters,
+        contentCharacters,
+        loadingCharacter,
+    } = useCharacter();
 
     useEffect(() => {
         if(!contentCharacters)
-        (async () => {
-            const data = await listCharacters.exec({limitForPage: CONTAINER.limitForPage});
-            setContentCharacters(data);
-            setCurrentPage(1);
-        })()
+        onListAllCharacters();
     }, [contentCharacters]);
 
-    const handleSearch = useCallback(async (name: string) => {
-        const data = await listCharacters.exec({limitForPage: CONTAINER.limitForPage, name});
-        if (data.results.length < 1) {
-            setContentCharacters(undefined);
-            Alert.alert("Personagem não encontrado!");
+    const onRenderTheInfo = () =>  {
+        if (contentCharacters && contentCharacters.results.length < 1) {
+            return (
+                <View style={styles.containerNotFount}>
+                    <Text style={styles.textNotFount}>Personagem não encontrado</Text>
+                </View>
+            );
         }
-        setContentCharacters(data);
-        console.log(data)
-        setCurrentPage(1);
-    }, [setContentCharacters, listCharacters]);
 
-    const handleSetPage = useCallback(async (numberPage: number) => {
-        const offset = (numberPage - 1) * CONTAINER.limitForPage;
-        console.log(offset, contentCharacters?.lastSearched);
-        const data = await listCharacters.exec({
-            limitForPage: CONTAINER.limitForPage, 
-            name: contentCharacters?.lastSearched,
-            offset, 
-        });
-        setContentCharacters(data);
-        setCurrentPage(numberPage);
-    }, [setContentCharacters, listCharacters, contentCharacters]);
+        if (!contentCharacters || loadingCharacter) {
+            return (
+                <View style={styles.containerLoading}>
+                <Loading size={'large'} />
+            </View>
+            );
+        }
+
+        return (
+            <ListCharacter  
+                limitForPage={CONTAINER.limitForPage} 
+                contentCharacters={contentCharacters}
+            />
+        );
+    };
 
     return (
         <View style={styles.container}>
             <Header />
             <Search 
-                onSearch={handleSearch} 
+                onSearch={onSearch} 
                 title='Nome do Personagem'
             />
             {
-                !contentCharacters ? (
-                    <Text>Pesquisando</Text>
-                ) : (
-                    <ListCharacter 
-                        contentCharacter={contentCharacters} 
-                        limitForPage={CONTAINER.limitForPage} 
-                        onSetPage={handleSetPage}
-                        currentPage={currentPage}
-                    />
-                )
+              onRenderTheInfo()
             }
         </View>
     )

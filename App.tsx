@@ -8,6 +8,7 @@ import {
 import AppLoading from 'expo-app-loading'; 
 import { StatusBar } from 'expo-status-bar';
 import { MakeHome } from './src/main/factories/pages';
+import { MakeShareInfoContextsProviders } from './src/main/factories/contexts/share-info-contexts-provider';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,9 +22,9 @@ export default function App() {
   }
 
   return (
-    <>
+    <MakeShareInfoContextsProviders>
       <StatusBar style='dark' />
       <MakeHome />
-    </>
+    </MakeShareInfoContextsProviders>
   );
 }

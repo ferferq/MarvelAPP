@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import { View, TextInput, Keyboard, Text } from 'react-native';
+import { useCharacter } from '../../hooks';
 import { styles } from './styles';
 
 interface ISearch {
@@ -9,14 +10,12 @@ interface ISearch {
 }
 
 function SearchComponent ( { onSearch, title, maxLength=140 } : ISearch) {
-    const [loading, setLoading] = useState(false);
+    const { loadingCharacter } = useCharacter();
     const [wordsToSearch, setWordsToSearch] = useState('');
 
     const handleSearch = async () => {
-        setLoading(true);
         await onSearch(wordsToSearch);
         Keyboard.dismiss();
-        setLoading(false);
     }
 
     return (
@@ -29,7 +28,7 @@ function SearchComponent ( { onSearch, title, maxLength=140 } : ISearch) {
                 maxLength={maxLength}
                 onChangeText={setWordsToSearch}
                 value={wordsToSearch}
-                editable={!loading}
+                editable={!loadingCharacter}
                 onBlur={handleSearch}
             />
         </View>
