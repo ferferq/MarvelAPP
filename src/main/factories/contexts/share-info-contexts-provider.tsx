@@ -1,4 +1,4 @@
-import { CharacterProvider } from "../../../presentation/contexts";
+import { CharacterProvider, SeeMoreProvider } from "../../../presentation/contexts";
 import { ReactNode } from "react";
 
 interface MakeShareInfoContextsProvidersDTO{
@@ -8,7 +8,9 @@ interface MakeShareInfoContextsProvidersDTO{
 export function MakeShareInfoContextsProviders({ children }: MakeShareInfoContextsProvidersDTO) {
   return(
     <CharacterProvider>
-      {children}
+      <SeeMoreProvider>
+        {children}
+      </SeeMoreProvider>
     </CharacterProvider>
   );
 }

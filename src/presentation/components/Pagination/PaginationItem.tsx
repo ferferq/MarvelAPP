@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Pressable, Text } from 'react-native';
+import { TouchableOpacity, Text } from 'react-native';
 
 import { styles, buttonCurrent, textCurrent } from './styles';
 
@@ -13,7 +13,8 @@ export function PaginationItem({
   isCurrent, number, onPageChange
 }: PaginationItemProps) {
   return (
-    <Pressable
+    <TouchableOpacity
+      disabled={isCurrent}
       style={isCurrent ? buttonCurrent : styles.button}
       onPress={() => {!isCurrent && onPageChange(number)}}
     >
@@ -22,6 +23,6 @@ export function PaginationItem({
       >
         {number}
       </Text>
-    </Pressable>
+    </TouchableOpacity>
   );
 }

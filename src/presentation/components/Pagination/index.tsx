@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import { PaginationItem } from './PaginationItem'
@@ -37,15 +37,16 @@ function PaginationCompoenent({
 
   return (
     <View style={styles.container}>
-      <Pressable
+      <TouchableOpacity
+        disabled={currentPage > 1}
         style={styles.pressArrow}
-        onPress={() => { currentPage > 1 && onPageChange(currentPage - 1) }}
+        onPress={() => {onPageChange(currentPage - 1)}}
       >
         <Icon
           name='caretleft'
           style={currentPage < 2 ? iconArrowDisabled : styles.iconArrow}
         />
-      </Pressable>
+      </TouchableOpacity>
 
 
       <View style={styles.numbers}>
@@ -78,15 +79,16 @@ function PaginationCompoenent({
         {(currentPage + siblingsCount) < lastPage && (<PaginationItem onPageChange={onPageChange} number={lastPage} />)}
       </View>
 
-      <Pressable
+      <TouchableOpacity
+        disabled={currentPage < lastPage}
         style={styles.pressArrow}
-        onPress={() => { currentPage < lastPage && onPageChange(currentPage + 1) }}
+        onPress={() => { onPageChange(currentPage + 1) }}
       >
         <Icon
           name='caretright'
           style={currentPage === lastPage ? iconArrowDisabled : styles.iconArrow}
         />
-      </Pressable>
+      </TouchableOpacity>
     </View>
   );
 }
