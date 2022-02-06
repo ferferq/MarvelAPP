@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
     icon: {
         color: COLORS.COLOR_PRIMARY,
         fontSize: 20,
+        fontWeight:'900',
     },
     containerInfo: {
         flex: 1,

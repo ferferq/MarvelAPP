@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     },
     textNotFount: {
         fontSize: 16,
-        color: COLORS.COLOR_PRIMARY,
+        color: COLORS.GRAY_600,
         fontFamily: FONTS.BLACK,
     },
     containerLoading: {

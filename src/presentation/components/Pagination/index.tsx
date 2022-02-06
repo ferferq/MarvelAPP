@@ -38,8 +38,7 @@ function PaginationCompoenent({
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        disabled={currentPage > 1}
-        style={styles.pressArrow}
+        disabled={currentPage === 1}
         onPress={() => {onPageChange(currentPage - 1)}}
       >
         <Icon
@@ -80,7 +79,7 @@ function PaginationCompoenent({
       </View>
 
       <TouchableOpacity
-        disabled={currentPage < lastPage}
+        disabled={currentPage === lastPage}
         style={styles.pressArrow}
         onPress={() => { onPageChange(currentPage + 1) }}
       >
